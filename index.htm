@@ -3,12 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nossa História 💜</title>
+<title>Livro para meu bemm 💜</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Cinzel:wght@700&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Cinzel:wght@400;700&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --noise:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .25  0 0 0 0 .45  0 0 0 .5 0'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='.5'/></svg>");
+    --ease:cubic-bezier(.6,.1,.3,1);
+    --paper:#fffdf7;
+  }
   html,body{height:100%}
   body{
     background:#f3e8ff;
@@ -19,13 +24,9 @@
     color:#4c1d95;
   }
 
-  /* corações flutuantes */
+  /* ---------- corações flutuando ---------- */
   .hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
-  .heart{
-    position:absolute;bottom:-60px;
-    opacity:0;
-    animation:float linear infinite;
-  }
+  .heart{position:absolute;bottom:-60px;opacity:0;animation:float linear infinite}
   @keyframes float{
     0%{transform:translateY(0) translateX(0) rotate(0deg);opacity:0}
     10%{opacity:.8}
@@ -34,60 +35,160 @@
     100%{transform:translateY(-115vh) translateX(-20px) rotate(-10deg);opacity:0}
   }
 
-  /* livro */
-  .scene{position:relative;z-index:1;width:100%;display:flex;justify-content:center;padding:12px;perspective:2500px}
+  /* ---------- livro ---------- */
+  .scene{position:relative;z-index:1;width:100%;display:flex;justify-content:center;padding:14px 20px 30px 14px}
   .book{
-    position:relative;
-    width:min(800px,96vw);
+    --bw:min(800px,94vw,calc((100vh - 70px) * 1.8 / 1.1));
+    position:relative;left:0;
+    width:var(--bw);
     aspect-ratio:1.8/1.1;
-    transform-style:preserve-3d;
-    filter:drop-shadow(0 25px 35px rgba(76,29,149,.28));
+    perspective:2500px;
+    transition:left 1.2s var(--ease);
   }
-  .page{
-    position:absolute;inset:0;
+  .book.desk.closed{left:calc(var(--bw) * -0.25);left:round(calc(var(--bw) * -0.25),1px)}
+  .book.mob{
+    --bw:min(420px,94vw,calc((100vh - 70px) * 3 / 4.2));
+    aspect-ratio:3/4.2;
+  }
+  @supports (height:100dvh){
+    body{min-height:100dvh}
+    .book{--bw:min(800px,94vw,calc((100dvh - 70px) * 1.8 / 1.1))}
+    .book.mob{--bw:min(420px,94vw,calc((100dvh - 70px) * 3 / 4.2))}
+  }
+
+  /* bases: dão espessura de folhas e sombra de mesa */
+  .board{position:absolute;top:0;height:100%;width:50%;background:var(--paper);z-index:0}
+  .board.r{
+    left:50%;border-radius:0 18px 18px 0;
+    box-shadow:
+      1px 1px 0 #fff,2px 2px 0 #e9d5ff,3px 3px 0 #fff,4px 4px 0 #ddd6fe,
+      5px 5px 0 #fff,6px 6px 0 #e9d5ff,7px 7px 0 #fff,8px 8px 0 #7c3aed,
+      0 34px 40px -8px rgba(76,29,149,.38),0 12px 18px rgba(76,29,149,.16);
+  }
+  .board.l{
+    left:0;border-radius:18px 0 0 18px;
+    box-shadow:
+      -1px 1px 0 #fff,-2px 2px 0 #e9d5ff,-3px 3px 0 #fff,-4px 4px 0 #ddd6fe,
+      -5px 5px 0 #fff,-6px 6px 0 #e9d5ff,-7px 7px 0 #fff,-8px 8px 0 #7c3aed,
+      0 34px 40px -8px rgba(76,29,149,.38),0 12px 18px rgba(76,29,149,.16);
+    transition:opacity .6s ease;
+  }
+  .book.closed .board.l{opacity:0}
+  .book.mob .board.r{left:0;width:100%;border-radius:8px 18px 18px 8px}
+  .book.mob .board.l{display:none}
+
+  /* folhas (cada folha tem frente e verso) */
+  .leaf{
+    position:absolute;top:0;left:50%;width:50%;height:100%;
     transform-origin:left center;
-    transition:transform 1.2s cubic-bezier(.6,.1,.3,1);
+    transform-style:preserve-3d;
+    transition:transform 1.2s var(--ease), z-index 0s linear;
+  }
+  .book.mob .leaf{left:0;width:100%}
+  .leaf.flipped{transform:rotateY(-180deg)}
+  .book.mob .leaf.flipped{pointer-events:none}
+
+  .face{
+    position:absolute;inset:0;overflow:hidden;
     backface-visibility:hidden;-webkit-backface-visibility:hidden;
-    border-radius:6px 18px 18px 6px;
-    overflow:hidden;
-    background:#fffdf7;
+    background:var(--paper);
+    z-index:0;isolation:isolate;
+    transform-style:flat;
   }
-  .page.flipped{transform:rotateY(-180deg);pointer-events:none}
+  .face.back{transform:rotateY(180deg)}
+  .face.R{border-radius:0 16px 16px 0}
+  .face.L{border-radius:16px 0 0 16px}
+  .book.mob .face.R{border-radius:8px 16px 16px 8px}
 
-  /* capa */
-  #p0{z-index:30;background:linear-gradient(135deg,#a78bfa,#e9d5ff);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
-    text-align:center;padding:30px;color:#fff;border:3px solid rgba(255,255,255,.55)}
-  #p0 h1{font-family:'Dancing Script',cursive;font-size:3.5rem;text-shadow:0 3px 10px rgba(76,29,149,.35);line-height:1.1}
-  #p0 .credits{font-family:'Caveat',cursive;font-size:.95rem;max-width:80%;line-height:1.3;color:#4c1d95;opacity:.9}
+  /* papel: textura + sombra da lombada */
+  .face:not(.cover)::after{
+    content:'';position:absolute;inset:0;pointer-events:none;z-index:5;
+  }
+  .face.R:not(.cover)::after{
+    background:
+      linear-gradient(90deg,rgba(76,29,149,.22) 0,rgba(76,29,149,.07) 4%,transparent 11%),
+      linear-gradient(270deg,rgba(76,29,149,.08) 0,transparent 3%),
+      var(--noise);
+  }
+  .face.L::after{
+    background:
+      linear-gradient(270deg,rgba(76,29,149,.22) 0,rgba(76,29,149,.07) 4%,transparent 11%),
+      linear-gradient(90deg,rgba(76,29,149,.08) 0,transparent 3%),
+      var(--noise);
+  }
+
+  .pg{position:absolute;inset:0;display:flex;flex-direction:column;padding:28px 32px 62px}
+
+  /* navegação inferior de cada página */
+  .nav{position:absolute;left:22px;right:22px;bottom:16px;display:flex;justify-content:space-between;align-items:center;z-index:6}
+  .nbtn{
+    background:rgba(255,255,255,.8);border:1px solid #c4b5fd;border-radius:20px;padding:6px 16px;min-height:36px;
+    font-family:'Caveat',cursive;font-size:1.15rem;font-weight:600;color:#6d28d9;cursor:pointer;
+    transition:background .2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  }
+  button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  @media (hover:hover){.nbtn:hover{background:#f5f3ff}}
+  .nbtn:active{background:#ede9fe}
+  .roman{font-family:'Cinzel',serif;font-weight:700;color:#a78bfa;letter-spacing:4px;font-size:.9rem}
+
+  /* ---------- CAPA ---------- */
+  .face.cover{
+    background:
+      linear-gradient(90deg,rgba(30,10,70,.55) 0,rgba(30,10,70,.2) 2%,rgba(255,255,255,.28) 3%,rgba(30,10,70,.18) 4.4%,transparent 8%),
+      repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,transparent 1px 4px),
+      linear-gradient(155deg,#5b21b6 0%,#7c3aed 45%,#a78bfa 100%);
+    box-shadow:inset -4px 0 10px rgba(30,10,70,.3);
+    color:#f6f0ff;
+  }
+  .cover-pg{align-items:center;justify-content:center;text-align:center;padding:26px 36px;gap:8px}
+  .cover-pg::before{
+    content:'';position:absolute;inset:16px;border:1.5px solid rgba(246,240,255,.5);border-radius:6px;pointer-events:none;
+  }
+  .orn{position:absolute;width:86px;height:86px;color:#f6f0ff;pointer-events:none}
+  .orn.tl{top:11px;left:11px}
+  .orn.tr{top:11px;right:11px;transform:scaleX(-1)}
+  .orn.bl{bottom:11px;left:11px;transform:scaleY(-1)}
+  .orn.br{bottom:11px;right:11px;transform:scale(-1,-1)}
+  .c-top{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:5px;color:#e9ddff;margin-top:10px}
+  .c-frame{
+    position:relative;padding:8px 30px 8px;border:2px solid #f6f0ff;border-radius:4px;
+    outline:1.5px solid rgba(246,240,255,.55);outline-offset:5px;
+    display:flex;flex-direction:column;align-items:center;margin:8px 0;
+    background:rgba(30,10,70,.12);
+  }
+  .c-frame h1{font-family:'Dancing Script',cursive;font-weight:700;font-size:3.5rem;line-height:.98;text-shadow:0 2px 8px rgba(30,10,70,.45);padding:2px 0}
+  .flour{width:120px;height:22px;color:#f6f0ff}
+  .flour.flip{transform:scaleY(-1)}
+  .c-since{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:4px;color:#e9ddff}
+  .credits{
+    font-size:1.02rem;font-weight:600;line-height:1.2;max-width:94%;color:#fff;
+    background:rgba(30,10,70,.34);border-radius:12px;padding:6px 12px;margin-top:2px;
+    text-shadow:0 1px 2px rgba(30,10,70,.6);
+  }
   .btn-open{
-    background:#7c3aed;color:#fff;border:none;border-radius:30px;
-    padding:12px 28px;font-family:'Caveat',cursive;font-size:1.4rem;cursor:pointer;
-    box-shadow:0 6px 16px rgba(124,58,237,.4);transition:transform .2s,box-shadow .2s;
+    background:#f6f0ff;color:#5b21b6;border:none;border-radius:30px;margin-top:4px;
+    padding:9px 26px;font-family:'Caveat',cursive;font-weight:600;font-size:1.35rem;cursor:pointer;
+    box-shadow:0 6px 16px rgba(30,10,70,.35);transition:transform .2s,box-shadow .2s;
   }
-  .btn-open:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 9px 20px rgba(124,58,237,.5)}
+  .btn-open:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 9px 20px rgba(30,10,70,.45)}
 
-  /* abertura dupla */
-  #p1{z-index:29;display:flex}
-  .side{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px 22px;text-align:center;min-width:0}
-  .cert{
-    background:#fffaf0;
+  /* ---------- CERTIFICADO ---------- */
+  .face.cert{
+    background-color:#fffaf0;
     background-image:radial-gradient(#e9d5ff 1px,transparent 1px);
     background-size:14px 14px;
     border-right:2px dashed #e9d5ff;
-    justify-content:space-between;
   }
-  .cert .top{letter-spacing:3px;color:#a78bfa;font-size:.8rem;font-family:'Cinzel',serif;font-weight:700}
-  .cert .mid{font-family:'Caveat',cursive;font-size:1.25rem;line-height:1.3;max-width:92%}
-  .cert .mid b{display:block;font-family:'Dancing Script',cursive;font-size:1.55rem;color:#4c1d95;margin:6px 0;font-weight:700}
-  .cert .love{font-size:1.2rem}
-  .cert .foot{border-top:1px solid #e9d5ff;padding-top:6px;font-size:1rem;color:#6d28d9;width:80%}
+  .cert-pg{align-items:center;justify-content:space-between;text-align:center;padding:26px 28px 66px}
+  .cert-pg .top{letter-spacing:3px;color:#a78bfa;font-size:.72rem;font-family:'Cinzel',serif;font-weight:700}
+  .cert-pg .mid{font-size:1.22rem;line-height:1.25;max-width:92%}
+  .cert-pg .mid b{display:block;font-family:'Dancing Script',cursive;font-size:1.55rem;color:#4c1d95;margin:4px 0;font-weight:700;line-height:1.1}
+  .cert-pg .love{font-size:1.15rem}
+  .cert-pg .foot{border-top:1px solid #e9d5ff;padding-top:5px;font-size:1rem;color:#6d28d9;width:78%}
 
   .stamp{
     position:relative;width:130px;height:130px;border-radius:50%;
-    border:4px double #7c3aed;
-    transform:rotate(-18deg);
-    color:#6d28d9;
+    border:4px double #7c3aed;transform:rotate(-18deg);color:#6d28d9;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     opacity:0;flex-shrink:0;
   }
@@ -101,206 +202,244 @@
     100%{transform:rotate(-18deg) scale(1);opacity:.9}
   }
 
-  .toc{background:#fffdf7}
-  .toc h2{font-family:'Dancing Script',cursive;font-size:2.1rem;color:#6d28d9;margin-bottom:8px}
-  .toc ul{list-style:none;width:100%;text-align:left}
-  .toc li{border-bottom:1px dashed #e9d5ff;padding:8px;cursor:pointer;font-size:1.05rem;line-height:1.15;transition:background .2s}
-  .toc li:hover{background:#f5f3ff}
-  .toc li:last-child{border-bottom:none}
+  /* ---------- SUMÁRIO ---------- */
+  .face.toc{background:#fffdf7}
+  .toc-pg{align-items:center;padding:26px 30px 56px}
+  .toc-pg h2{font-family:'Dancing Script',cursive;font-size:2.1rem;color:#6d28d9;margin-bottom:2px;font-weight:700}
+  .toc-pg .flour{color:#c4b5fd;margin-bottom:6px}
+  .toc-pg ul{list-style:none;width:100%;text-align:left;overflow:auto}
+  .toc-pg li{border-bottom:1px dashed #e9d5ff;padding:6px 8px;cursor:pointer;font-size:1.02rem;line-height:1.12;transition:background .2s}
+  .toc-pg li:hover{background:#f5f3ff}
+  .toc-pg li:last-child{border-bottom:none}
 
-  /* capítulos */
-  .chapter{display:flex;flex-direction:column;padding:34px 44px;background:#fffdf7;
-    background-image:linear-gradient(90deg,rgba(167,139,250,.12),transparent 6%)}
-  .chapter h2{font-family:'Dancing Script',cursive;font-size:1.7rem;color:#6d28d9;margin-bottom:12px;text-align:center}
-  .chapter .body{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;overflow:auto}
-  .chapter p{font-family:'Caveat',cursive;font-size:1.28rem;line-height:1.45;text-align:center;max-width:620px;color:#4c1d95}
-  .chapter p + p{margin-top:10px}
-  .chapter p.long{font-size:1.12rem;line-height:1.35}
-  .chapter nav{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
-  .nbtn{background:transparent;border:1px solid #ddd6fe;border-radius:20px;padding:6px 16px;
-    font-family:'Caveat',cursive;font-size:1.15rem;color:#6d28d9;cursor:pointer;transition:background .2s}
-  .nbtn:hover{background:#f5f3ff}
-  .roman{text-align:center;font-family:'Cinzel',serif;color:#a78bfa;letter-spacing:4px;margin-top:6px;font-size:.95rem}
-  .close-btn{margin-top:16px;background:#7c3aed;color:#fff;border:none;border-radius:30px;padding:10px 24px;
-    font-family:'Caveat',cursive;font-size:1.3rem;cursor:pointer;box-shadow:0 5px 14px rgba(124,58,237,.35)}
-  .close-btn:hover{transform:scale(1.04)}
+  /* ---------- CAPÍTULOS ---------- */
+  .ch-pg{align-items:center;padding:30px 34px 62px}
+  .ch-pg h2{font-family:'Dancing Script',cursive;font-size:1.7rem;color:#6d28d9;text-align:center;font-weight:700}
+  .ch-pg .flour{color:#c4b5fd;margin:2px 0 8px}
+  .ch-body{flex:1;width:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;overflow:auto}
+  .ch-body p{font-size:1.28rem;line-height:1.42;text-align:center;color:#4c1d95}
+  .ch-body p.long{font-size:1.12rem;line-height:1.33}
+  .ch-body p + p{margin-top:10px}
+  .close-btn{
+    margin-top:16px;background:#7c3aed;color:#fff;border:none;border-radius:30px;padding:9px 24px;
+    font-family:'Caveat',cursive;font-size:1.3rem;cursor:pointer;box-shadow:0 5px 14px rgba(124,58,237,.35);transition:transform .2s;
+  }
+  .close-btn:hover{transform:scale(1.05)}
 
-  #p2{z-index:28}#p3{z-index:27}#p4{z-index:26}#p5{z-index:25}
-  #p6{z-index:24}#p7{z-index:23}#p8{z-index:22}#p9{z-index:21}
-
-  /* celular */
+  /* ---------- celular ---------- */
   @media (max-width:700px){
-    .book{width:100%;max-width:420px;aspect-ratio:3/4.2}
-    #p0 h1{font-size:2.8rem}
-    #p0 .credits{font-size:.85rem;max-width:92%}
-    #p1{flex-direction:column}
-    .side{padding:12px 14px}
-    .cert{border-right:none;border-bottom:2px dashed #e9d5ff}
-    .cert .top{font-size:.65rem}
-    .cert .mid{font-size:1rem}
-    .cert .mid b{font-size:1.25rem;margin:3px 0}
-    .cert .love{font-size:1rem}
-    .cert .foot{font-size:.85rem}
-    .stamp{width:84px;height:84px;border-width:3px}
-    .stamp .s-top,.stamp .s-bot{font-size:.42rem}
-    .stamp .s-g{font-size:1.9rem}
-    .toc h2{font-size:1.5rem;margin-bottom:2px}
-    .toc ul{overflow:auto}
-    .toc li{padding:4px 6px;font-size:.82rem}
-    .chapter{padding:22px 22px}
-    .chapter h2{font-size:1.45rem}
-    .chapter p{font-size:1.15rem}
-    .chapter p.long{font-size:1rem;line-height:1.3}
+    .scene{padding:12px 16px 26px 10px}
+    .pg{padding:26px 28px 62px}
+    .cover-pg{padding:32px 34px;gap:12px}
+    .credits{font-size:1.12rem;padding:8px 14px}
+    .nav{bottom:18px}
+    .orn{width:72px;height:72px}
+    .c-frame h1{font-size:3.3rem}
+    .cert-pg{padding:34px 26px 62px}
+    .cert-pg .mid{font-size:1.3rem}
+    .toc-pg{padding:30px 26px 62px}
+    .toc-pg li{padding:7px 8px;font-size:1.05rem}
+    .ch-pg{padding:34px 28px 62px}
+    .ch-body p.long{font-size:1.05rem;line-height:1.3}
   }
 </style>
 </head>
 <body>
 
+<!-- ornamentos reutilizáveis -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="corner" viewBox="0 0 100 100">
+      <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 97V24Q3 3 24 3H97"/>
+        <path d="M10 97V28Q10 10 28 10H97" opacity=".55"/>
+        <path d="M24 24C24 46 46 46 46 30C46 20 34 20 34 29C34 35 42 35 41 30"/>
+        <path d="M46 30C58 30 62 18 80 20C70 22 68 30 58 34"/>
+        <path d="M30 46C30 58 18 62 20 80C22 70 30 68 34 58"/>
+        <path d="M60 14C66 8 74 8 78 12C72 16 66 17 60 14Z"/>
+        <path d="M14 60C8 66 8 74 12 78C16 72 17 66 14 60Z"/>
+        <path d="M52 26C56 24 60 25 62 28" opacity=".7"/>
+        <path d="M26 52C24 56 25 60 28 62" opacity=".7"/>
+      </g>
+      <circle cx="24" cy="24" r="2.6" fill="currentColor"/>
+      <circle cx="88" cy="18" r="1.8" fill="currentColor"/>
+      <circle cx="18" cy="88" r="1.8" fill="currentColor"/>
+    </symbol>
+    <symbol id="flour" viewBox="0 0 160 28">
+      <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M70 15C60 5 50 11 40 9C30 7 26 1 18 3C10 5 12 13 20 11C26 9 24 5 20 6"/>
+        <path d="M90 15C100 5 110 11 120 9C130 7 134 1 142 3C150 5 148 13 140 11C134 9 136 5 140 6"/>
+      </g>
+      <path d="M80 24C75 17 68 20 72 25L80 30L88 25C92 20 85 17 80 24Z" fill="currentColor" transform="translate(0,-4)"/>
+    </symbol>
+  </defs>
+</svg>
+
 <div class="hearts" id="hearts"></div>
 
 <div class="scene">
-  <div class="book" id="book">
-
-    <!-- CAPA -->
-    <div class="page" id="p0">
-      <h1>Nossa História</h1>
-      <div class="credits">
-        De: Bobão (no bom sentido), esquisito, Chato, dramático, estranho, fofinho, bemm🤍<br>
-        Para: fofaa, fofinhaa, minhaa Fofinhaa, senhorita, bemm e meu bemmm💜
-      </div>
-      <button class="btn-open" onclick="nextPage()">Abrir livro 🤍</button>
-    </div>
-
-    <!-- PRIMEIRA ABERTURA DUPLA -->
-    <div class="page" id="p1">
-      <div class="side cert">
-        <div class="top">CERTIFICADO DE PROPRIEDADE</div>
-        <div class="mid">
-          Esse álbum pertence a
-          <b>Maria Vitória Taconi de Barros</b>
-          ou como todos aqueles apelidos que eu amo chamar
-        </div>
-        <div class="stamp" id="stamp">
-          <span class="s-top">APROVADO • G</span>
-          <span class="s-g">G</span>
-          <span class="s-bot">FEITO COM AMOR</span>
-        </div>
-        <div class="love">com todo carinho 💜</div>
-        <div class="foot">Poços de Caldas, 2026</div>
-      </div>
-      <div class="side toc">
-        <h2>Sumário</h2>
-        <ul>
-          <li onclick="goTo(1)">I - Quando te vi pela primeira vez</li>
-          <li onclick="goTo(2)">II - Quando conversei pela primeira vez com você de verdade</li>
-          <li onclick="goTo(3)">III - Quando te emprestei minha blusa aquele dia da chuva na escola</li>
-          <li onclick="goTo(4)">IV - Quando estávamos nos despedindo e eu te abracei pela primeira vez</li>
-          <li onclick="goTo(5)">V - O dia do laboratório</li>
-          <li onclick="goTo(6)">VI - O dia do LK</li>
-          <li onclick="goTo(7)">VII - Quando começamos a conversar mesmo, muito</li>
-          <li onclick="goTo(8)">VIII - Ainda estamos escrevendo...</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- CAPÍTULOS -->
-    <div class="page chapter" id="p2">
-      <h2>Capítulo I</h2>
-      <div class="body"><p>2024. Foi o primeiro ano q te vi... provavelmente devo ter te falado oi ou nem isso mass quemm diria como estaa hojee emm diaa , eu tinhaa acabado de entrarr naa escolaa kkkkkk</p></div>
-      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><button class="nbtn" onclick="nextPage()">Próximo →</button></nav>
-      <div class="roman">I</div>
-    </div>
-
-    <div class="page chapter" id="p3">
-      <h2>Capítulo II</h2>
-      <div class="body">
-        <p class="long">15 de agosto de 2026. Fiquei um dia inteiro pra saber o que te mandar e se você me responderia ou não.</p>
-        <p class="long">Mesmo apos cnvs com vc a noite toda euu fiqueii meio desacreditadoo enquantoo eu faziaa minhass coisas e lembroo de terr ficado diass pra te pedirr seu numeroo ate usarr uma figurinhaa como desculpaakkkkkkkk foii a melhor coisa q euu fizz</p>
-      </div>
-      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><button class="nbtn" onclick="nextPage()">Próximo →</button></nav>
-      <div class="roman">II</div>
-    </div>
-
-    <div class="page chapter" id="p4">
-      <h2>Capítulo III</h2>
-      <div class="body">
-        <p class="long">Estava chovendo na escola e eu te emprestei minha blusa. Parecia uma coisa pequena, mas ficou guardada em mim como um dos dias mais marcantess e dsclpp fofinhoo de todosskkkkkkk ataee hjj quando esta chovendoo etcc assim lembroo desse momentoo e de vcckkkkkk Fofinhaa</p>
-      </div>
-      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><button class="nbtn" onclick="nextPage()">Próximo →</button></nav>
-      <div class="roman">III</div>
-    </div>
-
-    <div class="page chapter" id="p5">
-      <h2>Capítulo IV</h2>
-      <div class="body">
-        <p class="long">Na hora da despedida quando iriamos entrar de feriasss se naoo me enganoo eu te abracei pela primeira vez. Meu coração disparou, e eu fingi que estava tudo normal mass fiqueii mtt felizz por dentrookkkkkkk .</p>
-      </div>
-      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><button class="nbtn" onclick="nextPage()">Próximo →</button></nav>
-      <div class="roman">IV</div>
-    </div>
-
-    <div class="page chapter" id="p6">
-      <h2>Capítulo V</h2>
-      <div class="body">
-        <p class="long">O dia do laboratório. Um dia que tinha tudo pra ser comum e virou uma das melhores memória daquelas que quandoo olho praa vcc lembrooo principalmentee peloss motivosskkkkkkk comoo seu vicio emm mentalista que euu vou assistir comm vcc algumm diaa</p>
-      </div>
-      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><button class="nbtn" onclick="nextPage()">Próximo →</button></nav>
-      <div class="roman">V</div>
-    </div>
-
-    <div class="page chapter" id="p7">
-      <h2>Capítulo VI</h2>
-      <div class="body"><p class="long">o diaa do Lk.... Prefiro não comentar muito, mas você sabe que eu faria tudo novamente peloss mesmos motivoss e sem arrependimento algumm de terr persistido maiss ( naoo ia desistir taoo facil lde vcc )</p></div>
-      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><button class="nbtn" onclick="nextPage()">Próximo →</button></nav>
-      <div class="roman">VI</div>
-    </div>
-
-    <div class="page chapter" id="p8">
-      <h2>Capítulo VII</h2>
-      <div class="body"><p class="long">E aa situaçao de hjjj vocee sabe que desde entaoo tudoo q aconteceuu eu naoo consegui ficar umm dia sem pensar emm vcc de te mandar msgg ouu de querer ficar cvnss comm vc o diaa ou a madrugada inteiraa mesmoo que com o sonoo me quebrandoo no meiooKKKKKKK quantas vzss tomei remedioo pra dor de cabeça e msmm assimm quis ficar na frente do celularr por vcckkkkkkk isso éé loucuraa e vcc se recusa a tomarr um remedio e parar de cnvss cmgg ( essa segunda parte eu nunca vou apoiar )</p></div>
-      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><button class="nbtn" onclick="nextPage()">Próximo →</button></nav>
-      <div class="roman">VII</div>
-    </div>
-
-    <div class="page chapter" id="p9">
-      <h2>Capítulo VIII</h2>
-      <div class="body">
-        <p>E eu quero continuar escrevendo todos os próximos capítulos com você. 💜</p>
-        <button class="close-btn" onclick="goTo(0)">Fechar com carinho 🤍</button>
-      </div>
-      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><span></span></nav>
-      <div class="roman">VIII</div>
-    </div>
-
+  <div class="book desk closed" id="book">
+    <div class="board l"></div>
+    <div class="board r"></div>
   </div>
 </div>
 
 <script>
-  const pages = Array.from({length:10},(_,i)=>document.getElementById('p'+i));
-  const stamp = document.getElementById('stamp');
-  let current = 0;
-  let stampTimer = null;
+  /* ---------------- conteúdo ---------------- */
+  const CAPS = [
+    {r:'I',   t:['2024. Foi o primeiro ano q te vi... provavelmente devo ter te falado oi ou nem isso mass quemm diria como estaa hojee emm diaa , eu tinhaa acabado de entrarr naa escolaa kkkkkk']},
+    {r:'II',  t:['15 de agosto de 2026. Fiquei um dia inteiro pra saber o que te mandar e se você me responderia ou não.','Mesmo apos cnvs com vc a noite toda euu fiqueii meio desacreditadoo enquantoo eu faziaa minhass coisas e lembroo de terr ficado diass pra te pedirr seu numeroo ate usarr uma figurinhaa como desculpaakkkkkkkk foii a melhor coisa q euu fizz']},
+    {r:'III', t:['Estava chovendo na escola e eu te emprestei minha blusa. Parecia uma coisa pequena, mas ficou guardada em mim como um dos dias mais marcantess e dsclpp fofinhoo de todosskkkkkkk ataee hjj quando esta chovendoo etcc assim lembroo desse momentoo e de vcckkkkkk Fofinhaa']},
+    {r:'IV',  t:['Na hora da despedida quando iriamos entrar de feriasss se naoo me enganoo eu te abracei pela primeira vez. Meu coração disparou, e eu fingi que estava tudo normal mass fiqueii mtt felizz por dentrookkkkkkk .']},
+    {r:'V',   t:['O dia do laboratório. Um dia que tinha tudo pra ser comum e virou uma das melhores memória daquelas que quandoo olho praa vcc lembrooo principalmentee peloss motivosskkkkkkk comoo seu vicio emm mentalista que euu vou assistir comm vcc algumm diaa']},
+    {r:'VI',  t:['o diaa do Lk.... Prefiro não comentar muito, mas você sabe que eu faria tudo novamente peloss mesmos motivoss e sem arrependimento algumm de terr persistido maiss ( naoo ia desistir taoo facil lde vcc )']},
+    {r:'VII', t:['E aa situaçao de hjjj vocee sabe que desde entaoo tudoo q aconteceuu eu naoo consegui ficar umm dia sem pensar emm vcc de te mandar msgg ouu de querer ficar cvnss comm vc o diaa ou a madrugada inteiraa mesmoo que com o sonoo me quebrandoo no meiooKKKKKKK quantas vzss tomei remedioo pra dor de cabeça e msmm assimm quis ficar na frente do celularr por vcckkkkkkk isso éé loucuraa e vcc se recusa a tomarr um remedio e parar de cnvss cmgg ( essa segunda parte eu nunca vou apoiar )']},
+    {r:'VIII',t:['E eu quero continuar escrevendo todos os próximos capítulos com você. 💜'], close:true}
+  ];
+  const TOC = [
+    'I - Quando te vi pela primeira vez',
+    'II - Quando conversei pela primeira vez com você de verdade',
+    'III - Quando te emprestei minha blusa aquele dia da chuva na escola',
+    'IV - Quando estávamos nos despedindo e eu te abracei pela primeira vez',
+    'V - O dia do laboratório',
+    'VI - O dia do LK',
+    'VII - Quando começamos a conversar mesmo, muito',
+    'VIII - Ainda estamos escrevendo...'
+  ];
+
+  /* ordem de leitura: 0 capa, 1 certificado, 2 sumário, 3..10 capítulos I..VIII */
+  const LAST = 10;
+
+  function navHTML(p, side, mode, roman){
+    const hasPrev = p>0 && (mode==='mob' || side==='L');
+    const hasNext = p<LAST && (mode==='mob' || side==='R');
+    const prev = hasPrev ? '<button class="nbtn" onclick="prevPage()">← Voltar</button>' : '<span></span>';
+    const next = hasNext ? '<button class="nbtn" onclick="nextPage()">Próximo →</button>' : '<span></span>';
+    return '<div class="nav">'+prev+'<span class="roman">'+(roman||'')+'</span>'+next+'</div>';
+  }
+
+  function faceHTML(p, side, mode, which){
+    const cls = 'face '+which+' '+side;
+    if(p===0){
+      return '<div class="'+cls+' cover"><div class="pg cover-pg">'+
+        '<svg class="orn tl" viewBox="0 0 100 100"><use href="#corner"/></svg>'+
+        '<svg class="orn tr" viewBox="0 0 100 100"><use href="#corner"/></svg>'+
+        '<svg class="orn bl" viewBox="0 0 100 100"><use href="#corner"/></svg>'+
+        '<svg class="orn br" viewBox="0 0 100 100"><use href="#corner"/></svg>'+
+        '<div class="c-top">EDIÇÃO ESPECIAL</div>'+
+        '<div class="c-frame"><svg class="flour" viewBox="0 0 160 28"><use href="#flour"/></svg>'+
+          '<h1>Nossa<br>História</h1>'+
+          '<svg class="flour flip" viewBox="0 0 160 28"><use href="#flour"/></svg></div>'+
+        '<div class="c-since">DESDE 2024</div>'+
+        '<div class="credits">De: Bobão (no bom sentido), esquisito, Chato, dramático, estranho, fofinho, bemm🤍<br>'+
+        'Para: fofaa, fofinhaa, minhaa Fofinhaa, senhorita, bemm e meu bemmm💜</div>'+
+        '<button class="btn-open" onclick="nextPage()">Abrir livro 🤍</button>'+
+      '</div></div>';
+    }
+    if(p===1){
+      return '<div class="'+cls+' cert"><div class="pg cert-pg">'+
+        '<div class="top">CERTIFICADO DE PROPRIEDADE</div>'+
+        '<div class="mid">Esse álbum pertence a<b>Maria Vitória Taconi de Barros</b>ou como todos aqueles apelidos que eu amo chamar</div>'+
+        '<div class="stamp" id="stamp"><span class="s-top">APROVADO • G</span><span class="s-g">G</span><span class="s-bot">FEITO COM AMOR</span></div>'+
+        '<div class="love">com todo carinho 💜</div>'+
+        '<div class="foot">Poços de Caldas, 2026</div>'+
+        navHTML(p,side,mode)+
+      '</div></div>';
+    }
+    if(p===2){
+      let li = TOC.map((t,i)=>'<li onclick="goTo('+(i+1)+')">'+t+'</li>').join('');
+      return '<div class="'+cls+' toc"><div class="pg toc-pg">'+
+        '<h2>Sumário</h2><svg class="flour" viewBox="0 0 160 28"><use href="#flour"/></svg>'+
+        '<ul>'+li+'</ul>'+
+        navHTML(p,side,mode)+
+      '</div></div>';
+    }
+    const c = CAPS[p-3];
+    const paras = c.t.map(t=>'<p'+(t.length>170?' class="long"':'')+'>'+t+'</p>').join('');
+    const close = c.close ? '<button class="close-btn" onclick="goTo(0)">Fechar com carinho 🤍</button>' : '';
+    return '<div class="'+cls+'"><div class="pg ch-pg">'+
+      '<h2>Capítulo '+c.r+'</h2><svg class="flour" viewBox="0 0 160 28"><use href="#flour"/></svg>'+
+      '<div class="ch-body">'+paras+close+'</div>'+
+      navHTML(p,side,mode,c.r)+
+    '</div></div>';
+  }
+
+  /* ---------------- livro ---------------- */
+  const book = document.getElementById('book');
+  const mq = window.matchMedia('(max-width:700px)');
+  let mode = 'desk', leaves = [], current = 0, MAX = 5, stampTimer = null;
+
+  function build(){
+    mode = mq.matches ? 'mob' : 'desk';
+    book.className = 'book '+mode+' closed';
+    book.querySelectorAll('.leaf').forEach(l=>l.remove());
+    leaves = [];
+    const n = mode==='desk' ? 6 : 11;
+    MAX = n-1;
+    for(let k=0;k<n;k++){
+      const leaf = document.createElement('div');
+      leaf.className = 'leaf';
+      if(mode==='desk'){
+        let html = faceHTML(2*k,'R',mode,'front');
+        if(2*k+1<=LAST) html += faceHTML(2*k+1,'L',mode,'back');
+        leaf.innerHTML = html;
+      }else{
+        leaf.innerHTML = faceHTML(k,'R',mode,'front');
+      }
+      leaf.style.zIndex = 100-k;
+      book.appendChild(leaf);
+      leaves.push(leaf);
+    }
+    current = 0;
+    render();
+  }
 
   function render(){
-    pages.forEach((p,i)=>p.classList.toggle('flipped', i<current));
+    const changing = [];
+    leaves.forEach((lf,k)=>{
+      if(lf.classList.contains('flipped') !== (k<current)) changing.push(k);
+    });
+    const forward = changing.length && !leaves[changing[0]].classList.contains('flipped');
+    (forward ? changing : changing.slice().reverse()).forEach((k,i)=>{
+      const d = i*110;
+      leaves[k].style.transitionDelay = d+'ms, '+(600+d)+'ms';
+    });
+    leaves.forEach((lf,k)=>{
+      const fl = k<current;
+      lf.classList.toggle('flipped', fl);
+      lf.style.zIndex = fl ? (k+1) : (100-k);
+    });
+    book.classList.toggle('closed', current===0);
+
     clearTimeout(stampTimer);
-    if(current===1){
-      stampTimer = setTimeout(()=>stamp.classList.add('show'),700);
-    }else{
-      stamp.classList.remove('show');
+    const stamp = document.getElementById('stamp');
+    if(stamp){
+      if(current===1){ stampTimer = setTimeout(()=>stamp.classList.add('show'),700); }
+      else{ stamp.classList.remove('show'); }
     }
   }
-  function nextPage(){ if(current<pages.length-1){ current++; render(); } }
-  function prevPage(){ if(current>0){ current--; render(); } }
-  // n = capítulo (1..8); 0 = fechar o livro
-  function goTo(n){ current = n===0 ? 0 : n+1; render(); }
 
-  // corações flutuantes
+  function nextPage(){ if(current<MAX){ current++; render(); } }
+  function prevPage(){ if(current>0){ current--; render(); } }
+  /* n = capítulo (1..8); 0 = fechar o livro */
+  function goTo(n){
+    if(n===0){ current = 0; }
+    else{
+      const p = n+2;
+      current = mode==='desk' ? Math.ceil(p/2) : p;
+    }
+    render();
+  }
+
+  mq.addEventListener('change', build);
+  build();
+
+  /* corações flutuantes */
   const emojis = ['💜','🤍','✨','💜','🤍'];
   const box = document.getElementById('hearts');
   for(let i=0;i<26;i++){
     const h = document.createElement('span');
-    h.className='heart';
+    h.className = 'heart';
     h.textContent = emojis[i%emojis.length];
     h.style.left = Math.random()*100+'%';
     h.style.fontSize = (14+Math.random()*22)+'px';
