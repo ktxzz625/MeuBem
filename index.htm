@@ -226,6 +226,32 @@
   }
   .close-btn:hover{transform:scale(1.05)}
 
+  .music-card{
+    position:fixed;top:14px;left:50%;z-index:20;
+    transform:translate(-50%,-30px);opacity:0;pointer-events:none;visibility:hidden;
+    display:flex;align-items:center;gap:12px;text-decoration:none;
+    width:max-content;max-width:calc(100vw - 112px);
+    background:rgba(255,255,255,.92);border:1px solid #ddd6fe;border-radius:40px;padding:10px 20px 10px 14px;
+    color:#4c1d95;box-shadow:0 8px 24px rgba(76,29,149,.28);
+    transition:opacity .8s ease,transform .8s var(--ease),visibility 0s linear .8s;
+  }
+  .music-card.show{
+    opacity:1;transform:translate(-50%,0);pointer-events:auto;visibility:visible;
+    transition:opacity .8s ease,transform .8s var(--ease),visibility 0s;
+  }
+  .music-card:hover{background:#fff;box-shadow:0 10px 28px rgba(124,58,237,.38)}
+  .music-card .note{font-size:1.5rem;animation:bob 1.6s ease-in-out infinite}
+  .music-card .mtxt{display:flex;flex-direction:column;line-height:1.1;text-align:left}
+  .music-card small{font-size:1rem;color:#7c3aed}
+  .music-card b{font-family:'Dancing Script',cursive;font-size:1.25rem;font-weight:700}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-4px) rotate(6deg)}}
+
+  .sound-btn{
+    position:fixed;top:12px;right:12px;z-index:20;width:40px;height:40px;border-radius:50%;
+    border:1px solid #ddd6fe;background:rgba(255,255,255,.8);font-size:1.1rem;cursor:pointer;
+    box-shadow:0 3px 10px rgba(76,29,149,.2);
+  }
+
   /* ---------- celular ---------- */
   @media (max-width:700px){
     .scene{padding:12px 16px 26px 10px}
@@ -276,6 +302,11 @@
 </svg>
 
 <div class="hearts" id="hearts"></div>
+<a class="music-card" id="music" href="https://www.youtube.com/watch?v=439kVuNoNrA&list=PLTBI47Fsjd08rD3pjaEyMLnxAFlarc4u6" target="_blank" rel="noopener noreferrer">
+  <span class="note">🎵</span>
+  <span class="mtxt"><small>Uma música que você me recomendou</small><b>e que me marcou muito 💜</b></span>
+</a>
+<button class="sound-btn" id="sound" onclick="toggleSound()" aria-label="Som das páginas">🔊</button>
 
 <div class="scene">
   <div class="book desk closed" id="book">
@@ -287,20 +318,20 @@
 <script>
   /* ---------------- conteúdo ---------------- */
   const CAPS = [
-    {r:'I',   t:['2024. Foi o primeiro ano q te vi... provavelmente devo ter te falado oi ou nem isso mass quemm diria como estaa hojee emm diaa , eu tinhaa acabado de entrarr naa escolaa kkkkkk']},
-    {r:'II',  t:['15 de agosto de 2026. Fiquei um dia inteiro pra saber o que te mandar e se você me responderia ou não.','Mesmo apos cnvs com vc a noite toda euu fiqueii meio desacreditadoo enquantoo eu faziaa minhass coisas e lembroo de terr ficado diass pra te pedirr seu numeroo ate usarr uma figurinhaa como desculpaakkkkkkkk foii a melhor coisa q euu fizz']},
-    {r:'III', t:['Estava chovendo na escola e eu te emprestei minha blusa. Parecia uma coisa pequena, mas ficou guardada em mim como um dos dias mais marcantess e dsclpp fofinhoo de todosskkkkkkk ataee hjj quando esta chovendoo etcc assim lembroo desse momentoo e de vcckkkkkk Fofinhaa']},
-    {r:'IV',  t:['Na hora da despedida quando iriamos entrar de feriasss se naoo me enganoo eu te abracei pela primeira vez. Meu coração disparou, e eu fingi que estava tudo normal mass fiqueii mtt felizz por dentrookkkkkkk .']},
-    {r:'V',   t:['O dia do laboratório. Um dia que tinha tudo pra ser comum e virou uma das melhores memória daquelas que quandoo olho praa vcc lembrooo principalmentee peloss motivosskkkkkkk comoo seu vicio emm mentalista que euu vou assistir comm vcc algumm diaa']},
-    {r:'VI',  t:['o diaa do Lk.... Prefiro não comentar muito, mas você sabe que eu faria tudo novamente peloss mesmos motivoss e sem arrependimento algumm de terr persistido maiss ( naoo ia desistir taoo facil lde vcc )']},
+    {r:'I', t:['2024. Foi o primeiro ano q te vi... provavelmente devo ter te falado oi ou nem isso mass quemm diria como estaa hojee emm diaa , eu tinhaa acabado de entrarr naa escolaa kkkkkk']},
+    {r:'II', t:['Estava chovendo na escola e eu te emprestei minha blusa. Parecia uma coisa pequena, mas ficou guardada em mim como um dos dias mais marcantess e dsclpp fofinhoo de todosskkkkkkk ataee hjj quando esta chovendoo etcc assim lembroo desse momentoo e de vcckkkkkk Fofinhaa']},
+    {r:'III', t:['Na hora da despedida quando iriamos entrar de feriasss se naoo me enganoo eu te abracei pela primeira vez. Meu coração disparou, e eu fingi que estava tudo normal mass fiqueii mtt felizz por dentrookkkkkkk .']},
+    {r:'IV', t:['15 de agosto de 2026. Fiquei um dia inteiro pra saber o que te mandar e se você me responderia ou não.','Mesmo apos cnvs com vc a noite toda euu fiqueii meio desacreditadoo enquantoo eu faziaa minhass coisas e lembroo de terr ficado diass pra te pedirr seu numeroo ate usarr uma figurinhaa como desculpaakkkkkkkk foii a melhor coisa q euu fizz']},
+    {r:'V', t:['O dia do laboratório. Um dia que tinha tudo pra ser comum e virou uma das melhores memória daquelas que quandoo olho praa vcc lembrooo principalmentee peloss motivosskkkkkkk comoo seu vicio emm mentalista que euu vou assistir comm vcc algumm diaa']},
+    {r:'VI', t:['o diaa do Lk.... Prefiro não comentar muito, mas você sabe que eu faria tudo novamente peloss mesmos motivoss e sem arrependimento algumm de terr persistido maiss ( naoo ia desistir taoo facil lde vcc )']},
     {r:'VII', t:['E aa situaçao de hjjj vocee sabe que desde entaoo tudoo q aconteceuu eu naoo consegui ficar umm dia sem pensar emm vcc de te mandar msgg ouu de querer ficar cvnss comm vc o diaa ou a madrugada inteiraa mesmoo que com o sonoo me quebrandoo no meiooKKKKKKK quantas vzss tomei remedioo pra dor de cabeça e msmm assimm quis ficar na frente do celularr por vcckkkkkkk isso éé loucuraa e vcc se recusa a tomarr um remedio e parar de cnvss cmgg ( essa segunda parte eu nunca vou apoiar )']},
-    {r:'VIII',t:['E eu quero continuar escrevendo todos os próximos capítulos com você. 💜'], close:true}
+    {r:'VIII', t:['E eu quero continuar escrevendo todos os próximos capítulos com você. 💜'], close:true}
   ];
   const TOC = [
     'I - Quando te vi pela primeira vez',
-    'II - Quando conversei pela primeira vez com você de verdade',
-    'III - Quando te emprestei minha blusa aquele dia da chuva na escola',
-    'IV - Quando estávamos nos despedindo e eu te abracei pela primeira vez',
+    'II - Quando te emprestei minha blusa aquele dia da chuva na escola',
+    'III - Quando estávamos nos despedindo e eu te abracei pela primeira vez',
+    'IV - Quando conversei pela primeira vez com você de verdade',
     'V - O dia do laboratório',
     'VI - O dia do LK',
     'VII - Quando começamos a conversar mesmo, muito',
@@ -356,7 +387,7 @@
     }
     const c = CAPS[p-3];
     const paras = c.t.map(t=>'<p'+(t.length>170?' class="long"':'')+'>'+t+'</p>').join('');
-    const close = c.close ? '<button class="close-btn" onclick="goTo(0)">Fechar com carinho 🤍</button>' : '';
+    const close = c.close ? '<button class="close-btn" onclick="fechar()">Fechar com carinho 🤍</button>' : '';
     return '<div class="'+cls+'"><div class="pg ch-pg">'+
       '<h2>Capítulo '+c.r+'</h2><svg class="flour" viewBox="0 0 160 28"><use href="#flour"/></svg>'+
       '<div class="ch-body">'+paras+close+'</div>'+
@@ -403,6 +434,7 @@
     (forward ? changing : changing.slice().reverse()).forEach((k,i)=>{
       const d = i*110;
       leaves[k].style.transitionDelay = d+'ms, '+(600+d)+'ms';
+      flipSound(d);
     });
     leaves.forEach((lf,k)=>{
       const fl = k<current;
@@ -419,16 +451,59 @@
     }
   }
 
-  function nextPage(){ if(current<MAX){ current++; render(); } }
-  function prevPage(){ if(current>0){ current--; render(); } }
+  /* som de página passando (gerado no navegador, sem arquivo) */
+  let audioCtx = null, muted = false;
+  function ensureAudio(){
+    if(!audioCtx){
+      try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){}
+    }
+    if(audioCtx && audioCtx.state==='suspended'){ audioCtx.resume(); }
+  }
+  function flipSound(delayMs){
+    if(muted || !audioCtx) return;
+    try{
+      const t0 = audioCtx.currentTime + delayMs/1000 + .05, dur = .6;
+      const len = Math.floor(audioCtx.sampleRate*dur);
+      const buf = audioCtx.createBuffer(1,len,audioCtx.sampleRate);
+      const data = buf.getChannelData(0);
+      for(let i=0;i<len;i++) data[i] = Math.random()*2-1;
+      const src = audioCtx.createBufferSource(); src.buffer = buf;
+      const bp = audioCtx.createBiquadFilter(); bp.type='bandpass'; bp.Q.value = .8;
+      bp.frequency.setValueAtTime(700,t0);
+      bp.frequency.exponentialRampToValueAtTime(3600,t0+.2);
+      bp.frequency.exponentialRampToValueAtTime(1300,t0+dur);
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(.0001,t0);
+      g.gain.exponentialRampToValueAtTime(.32,t0+.07);
+      g.gain.exponentialRampToValueAtTime(.1,t0+.3);
+      g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+      src.connect(bp); bp.connect(g); g.connect(audioCtx.destination);
+      src.start(t0);
+    }catch(e){}
+  }
+  function toggleSound(){
+    ensureAudio();
+    muted = !muted;
+    document.getElementById('sound').textContent = muted ? '🔇' : '🔊';
+  }
+
+  function nextPage(){ ensureAudio(); if(current<MAX){ current++; render(); } }
+  function prevPage(){ ensureAudio(); if(current>0){ current--; render(); } }
   /* n = capítulo (1..8); 0 = fechar o livro */
   function goTo(n){
+    ensureAudio();
     if(n===0){ current = 0; }
     else{
       const p = n+2;
       current = mode==='desk' ? Math.ceil(p/2) : p;
     }
     render();
+  }
+
+  /* ao fechar o livro com carinho, aparece a música no topo */
+  function fechar(){
+    goTo(0);
+    setTimeout(()=>document.getElementById('music').classList.add('show'),1300);
   }
 
   mq.addEventListener('change', build);
