@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nossa História 💜</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Cinzel:wght@700&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:#f3e8ff;
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    font-family:'Caveat',cursive;
+    color:#4c1d95;
+  }
+
+  /* corações flutuantes */
+  .hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+  .heart{
+    position:absolute;bottom:-60px;
+    opacity:0;
+    animation:float linear infinite;
+  }
+  @keyframes float{
+    0%{transform:translateY(0) translateX(0) rotate(0deg);opacity:0}
+    10%{opacity:.8}
+    50%{transform:translateY(-55vh) translateX(25px) rotate(12deg)}
+    90%{opacity:.7}
+    100%{transform:translateY(-115vh) translateX(-20px) rotate(-10deg);opacity:0}
+  }
+
+  /* livro */
+  .scene{position:relative;z-index:1;width:100%;display:flex;justify-content:center;padding:12px;perspective:2500px}
+  .book{
+    position:relative;
+    width:min(800px,96vw);
+    aspect-ratio:1.8/1.1;
+    transform-style:preserve-3d;
+    filter:drop-shadow(0 25px 35px rgba(76,29,149,.28));
+  }
+  .page{
+    position:absolute;inset:0;
+    transform-origin:left center;
+    transition:transform 1.2s cubic-bezier(.6,.1,.3,1);
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border-radius:6px 18px 18px 6px;
+    overflow:hidden;
+    background:#fffdf7;
+  }
+  .page.flipped{transform:rotateY(-180deg);pointer-events:none}
+
+  /* capa */
+  #p0{z-index:30;background:linear-gradient(135deg,#a78bfa,#e9d5ff);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+    text-align:center;padding:30px;color:#fff;border:3px solid rgba(255,255,255,.55)}
+  #p0 h1{font-family:'Dancing Script',cursive;font-size:3.5rem;text-shadow:0 3px 10px rgba(76,29,149,.35);line-height:1.1}
+  #p0 .credits{font-family:'Caveat',cursive;font-size:.95rem;max-width:80%;line-height:1.3;color:#4c1d95;opacity:.9}
+  .btn-open{
+    background:#7c3aed;color:#fff;border:none;border-radius:30px;
+    padding:12px 28px;font-family:'Caveat',cursive;font-size:1.4rem;cursor:pointer;
+    box-shadow:0 6px 16px rgba(124,58,237,.4);transition:transform .2s,box-shadow .2s;
+  }
+  .btn-open:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 9px 20px rgba(124,58,237,.5)}
+
+  /* abertura dupla */
+  #p1{z-index:29;display:flex}
+  .side{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px 22px;text-align:center;min-width:0}
+  .cert{
+    background:#fffaf0;
+    background-image:radial-gradient(#e9d5ff 1px,transparent 1px);
+    background-size:14px 14px;
+    border-right:2px dashed #e9d5ff;
+    justify-content:space-between;
+  }
+  .cert .top{letter-spacing:3px;color:#a78bfa;font-size:.8rem;font-family:'Cinzel',serif;font-weight:700}
+  .cert .mid{font-family:'Caveat',cursive;font-size:1.25rem;line-height:1.3;max-width:92%}
+  .cert .mid b{display:block;font-family:'Dancing Script',cursive;font-size:1.55rem;color:#4c1d95;margin:6px 0;font-weight:700}
+  .cert .love{font-size:1.2rem}
+  .cert .foot{border-top:1px solid #e9d5ff;padding-top:6px;font-size:1rem;color:#6d28d9;width:80%}
+
+  .stamp{
+    position:relative;width:130px;height:130px;border-radius:50%;
+    border:4px double #7c3aed;
+    transform:rotate(-18deg);
+    color:#6d28d9;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    opacity:0;flex-shrink:0;
+  }
+  .stamp .s-top,.stamp .s-bot{font-size:.6rem;font-family:'Cinzel',serif;font-weight:700;letter-spacing:1px}
+  .stamp .s-g{font-size:3rem;font-family:'Cinzel',serif;font-weight:700;line-height:1}
+  .stamp.show{animation:stampHit .6s cubic-bezier(.2,.8,.3,1.2) forwards}
+  @keyframes stampHit{
+    0%{transform:rotate(-18deg) scale(3) translateY(-100px);opacity:0}
+    50%{transform:rotate(-18deg) scale(.85) translateY(10px);opacity:1}
+    70%{transform:rotate(-18deg) scale(1.15)}
+    100%{transform:rotate(-18deg) scale(1);opacity:.9}
+  }
+
+  .toc{background:#fffdf7}
+  .toc h2{font-family:'Dancing Script',cursive;font-size:2.1rem;color:#6d28d9;margin-bottom:8px}
+  .toc ul{list-style:none;width:100%;text-align:left}
+  .toc li{border-bottom:1px dashed #e9d5ff;padding:8px;cursor:pointer;font-size:1.05rem;line-height:1.15;transition:background .2s}
+  .toc li:hover{background:#f5f3ff}
+  .toc li:last-child{border-bottom:none}
+
+  /* capítulos */
+  .chapter{display:flex;flex-direction:column;padding:34px 44px;background:#fffdf7;
+    background-image:linear-gradient(90deg,rgba(167,139,250,.12),transparent 6%)}
+  .chapter h2{font-family:'Dancing Script',cursive;font-size:1.7rem;color:#6d28d9;margin-bottom:12px;text-align:center}
+  .chapter .body{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;overflow:auto}
+  .chapter p{font-family:'Caveat',cursive;font-size:1.28rem;line-height:1.45;text-align:center;max-width:620px;color:#4c1d95}
+  .chapter p + p{margin-top:10px}
+  .chapter p.long{font-size:1.12rem;line-height:1.35}
+  .chapter nav{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+  .nbtn{background:transparent;border:1px solid #ddd6fe;border-radius:20px;padding:6px 16px;
+    font-family:'Caveat',cursive;font-size:1.15rem;color:#6d28d9;cursor:pointer;transition:background .2s}
+  .nbtn:hover{background:#f5f3ff}
+  .roman{text-align:center;font-family:'Cinzel',serif;color:#a78bfa;letter-spacing:4px;margin-top:6px;font-size:.95rem}
+  .close-btn{margin-top:16px;background:#7c3aed;color:#fff;border:none;border-radius:30px;padding:10px 24px;
+    font-family:'Caveat',cursive;font-size:1.3rem;cursor:pointer;box-shadow:0 5px 14px rgba(124,58,237,.35)}
+  .close-btn:hover{transform:scale(1.04)}
+
+  #p2{z-index:28}#p3{z-index:27}#p4{z-index:26}#p5{z-index:25}
+  #p6{z-index:24}#p7{z-index:23}#p8{z-index:22}#p9{z-index:21}
+
+  /* celular */
+  @media (max-width:700px){
+    .book{width:100%;max-width:420px;aspect-ratio:3/4.2}
+    #p0 h1{font-size:2.8rem}
+    #p0 .credits{font-size:.85rem;max-width:92%}
+    #p1{flex-direction:column}
+    .side{padding:12px 14px}
+    .cert{border-right:none;border-bottom:2px dashed #e9d5ff}
+    .cert .top{font-size:.65rem}
+    .cert .mid{font-size:1rem}
+    .cert .mid b{font-size:1.25rem;margin:3px 0}
+    .cert .love{font-size:1rem}
+    .cert .foot{font-size:.85rem}
+    .stamp{width:84px;height:84px;border-width:3px}
+    .stamp .s-top,.stamp .s-bot{font-size:.42rem}
+    .stamp .s-g{font-size:1.9rem}
+    .toc h2{font-size:1.5rem;margin-bottom:2px}
+    .toc ul{overflow:auto}
+    .toc li{padding:4px 6px;font-size:.82rem}
+    .chapter{padding:22px 22px}
+    .chapter h2{font-size:1.45rem}
+    .chapter p{font-size:1.15rem}
+    .chapter p.long{font-size:1rem;line-height:1.3}
+  }
+</style>
+</head>
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<div class="scene">
+  <div class="book" id="book">
+
+    <!-- CAPA -->
+    <div class="page" id="p0">
+      <h1>Nossa História</h1>
+      <div class="credits">
+        De: Bobão (no bom sentido), esquisito, Chato, dramático, estranho, fofinho, bemm🤍<br>
+        Para: fofaa, fofinhaa, minhaa Fofinhaa, senhorita, bemm e meu bemmm💜
+      </div>
+      <button class="btn-open" onclick="nextPage()">Abrir livro 🤍</button>
+    </div>
+
+    <!-- PRIMEIRA ABERTURA DUPLA -->
+    <div class="page" id="p1">
+      <div class="side cert">
+        <div class="top">CERTIFICADO DE PROPRIEDADE</div>
+        <div class="mid">
+          Esse álbum pertence a
+          <b>Maria Vitória Taconi de Barros</b>
+          ou como todos aqueles apelidos que eu amo chamar
+        </div>
+        <div class="stamp" id="stamp">
+          <span class="s-top">APROVADO • G</span>
+          <span class="s-g">G</span>
+          <span class="s-bot">FEITO COM AMOR</span>
+        </div>
+        <div class="love">com todo carinho 💜</div>
+        <div class="foot">Poços de Caldas, 2026</div>
+      </div>
+      <div class="side toc">
+        <h2>Sumário</h2>
+        <ul>
+          <li onclick="goTo(1)">I - Quando te vi pela primeira vez</li>
+          <li onclick="goTo(2)">II - Quando conversei pela primeira vez com você de verdade</li>
+          <li onclick="goTo(3)">III - Quando te emprestei minha blusa aquele dia da chuva na escola</li>
+          <li onclick="goTo(4)">IV - Quando estávamos nos despedindo e eu te abracei pela primeira vez</li>
+          <li onclick="goTo(5)">V - O dia do laboratório</li>
+          <li onclick="goTo(6)">VI - O dia do LK</li>
+          <li onclick="goTo(7)">VII - Quando começamos a conversar mesmo, muito</li>
+          <li onclick="goTo(8)">VIII - Ainda estamos escrevendo...</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CAPÍTULOS -->
+    <div class="page chapter" id="p2">
+      <h2>Capítulo I</h2>
+      <div class="body"><p>2024. Foi o primeiro ano q te vi... provavelmente devo ter te falado oi ou nem isso mass quemm diria como estaa hojee emm diaa , eu tinhaa acabado de entrarr naa escolaa kkkkkk</p></div>
+      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><button class="nbtn" onclick="nextPage()">Próximo →</button></nav>
+      <div class="roman">I</div>
+    </div>
+
+    <div class="page chapter" id="p3">
+      <h2>Capítulo II</h2>
+      <div class="body">
+        <p class="long">15 de agosto de 2026. Fiquei um dia inteiro pra saber o que te mandar e se você me responderia ou não.</p>
+        <p class="long">Mesmo apos cnvs com vc a noite toda euu fiqueii meio desacreditadoo enquantoo eu faziaa minhass coisas e lembroo de terr ficado diass pra te pedirr seu numeroo ate usarr uma figurinhaa como desculpaakkkkkkkk foii a melhor coisa q euu fizz</p>
+      </div>
+      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><button class="nbtn" onclick="nextPage()">Próximo →</button></nav>
+      <div class="roman">II</div>
+    </div>
+
+    <div class="page chapter" id="p4">
+      <h2>Capítulo III</h2>
+      <div class="body">
+        <p class="long">Estava chovendo na escola e eu te emprestei minha blusa. Parecia uma coisa pequena, mas ficou guardada em mim como um dos dias mais marcantess e dsclpp fofinhoo de todosskkkkkkk ataee hjj quando esta chovendoo etcc assim lembroo desse momentoo e de vcckkkkkk Fofinhaa</p>
+      </div>
+      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><button class="nbtn" onclick="nextPage()">Próximo →</button></nav>
+      <div class="roman">III</div>
+    </div>
+
+    <div class="page chapter" id="p5">
+      <h2>Capítulo IV</h2>
+      <div class="body">
+        <p class="long">Na hora da despedida quando iriamos entrar de feriasss se naoo me enganoo eu te abracei pela primeira vez. Meu coração disparou, e eu fingi que estava tudo normal mass fiqueii mtt felizz por dentrookkkkkkk .</p>
+      </div>
+      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><button class="nbtn" onclick="nextPage()">Próximo →</button></nav>
+      <div class="roman">IV</div>
+    </div>
+
+    <div class="page chapter" id="p6">
+      <h2>Capítulo V</h2>
+      <div class="body">
+        <p class="long">O dia do laboratório. Um dia que tinha tudo pra ser comum e virou uma das melhores memória daquelas que quandoo olho praa vcc lembrooo principalmentee peloss motivosskkkkkkk comoo seu vicio emm mentalista que euu vou assistir comm vcc algumm diaa</p>
+      </div>
+      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><button class="nbtn" onclick="nextPage()">Próximo →</button></nav>
+      <div class="roman">V</div>
+    </div>
+
+    <div class="page chapter" id="p7">
+      <h2>Capítulo VI</h2>
+      <div class="body"><p class="long">o diaa do Lk.... Prefiro não comentar muito, mas você sabe que eu faria tudo novamente peloss mesmos motivoss e sem arrependimento algumm de terr persistido maiss ( naoo ia desistir taoo facil lde vcc )</p></div>
+      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><button class="nbtn" onclick="nextPage()">Próximo →</button></nav>
+      <div class="roman">VI</div>
+    </div>
+
+    <div class="page chapter" id="p8">
+      <h2>Capítulo VII</h2>
+      <div class="body"><p class="long">E aa situaçao de hjjj vocee sabe que desde entaoo tudoo q aconteceuu eu naoo consegui ficar umm dia sem pensar emm vcc de te mandar msgg ouu de querer ficar cvnss comm vc o diaa ou a madrugada inteiraa mesmoo que com o sonoo me quebrandoo no meiooKKKKKKK quantas vzss tomei remedioo pra dor de cabeça e msmm assimm quis ficar na frente do celularr por vcckkkkkkk isso éé loucuraa e vcc se recusa a tomarr um remedio e parar de cnvss cmgg ( essa segunda parte eu nunca vou apoiar )</p></div>
+      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><button class="nbtn" onclick="nextPage()">Próximo →</button></nav>
+      <div class="roman">VII</div>
+    </div>
+
+    <div class="page chapter" id="p9">
+      <h2>Capítulo VIII</h2>
+      <div class="body">
+        <p>E eu quero continuar escrevendo todos os próximos capítulos com você. 💜</p>
+        <button class="close-btn" onclick="goTo(0)">Fechar com carinho 🤍</button>
+      </div>
+      <nav><button class="nbtn" onclick="prevPage()">← Voltar</button><span></span></nav>
+      <div class="roman">VIII</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const pages = Array.from({length:10},(_,i)=>document.getElementById('p'+i));
+  const stamp = document.getElementById('stamp');
+  let current = 0;
+  let stampTimer = null;
+
+  function render(){
+    pages.forEach((p,i)=>p.classList.toggle('flipped', i<current));
+    clearTimeout(stampTimer);
+    if(current===1){
+      stampTimer = setTimeout(()=>stamp.classList.add('show'),700);
+    }else{
+      stamp.classList.remove('show');
+    }
+  }
+  function nextPage(){ if(current<pages.length-1){ current++; render(); } }
+  function prevPage(){ if(current>0){ current--; render(); } }
+  // n = capítulo (1..8); 0 = fechar o livro
+  function goTo(n){ current = n===0 ? 0 : n+1; render(); }
+
+  // corações flutuantes
+  const emojis = ['💜','🤍','✨','💜','🤍'];
+  const box = document.getElementById('hearts');
+  for(let i=0;i<26;i++){
+    const h = document.createElement('span');
+    h.className='heart';
+    h.textContent = emojis[i%emojis.length];
+    h.style.left = Math.random()*100+'%';
+    h.style.fontSize = (14+Math.random()*22)+'px';
+    h.style.animationDuration = (9+Math.random()*12)+'s';
+    h.style.animationDelay = (-Math.random()*18)+'s';
+    box.appendChild(h);
+  }
+</script>
+</body>
+</html>
