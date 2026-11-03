@@ -392,6 +392,67 @@
     .lv-msg{min-height:130px}
   }
 
+
+  /* ---------- mensagem semanal (segunda 21:00) ---------- */
+  #mveil{z-index:39;background:rgba(36,12,82,.78)}
+  .mail-env{
+    position:fixed;z-index:40;left:50%;top:50%;transform:translate(-50%,-50%) scale(.04);opacity:0;visibility:hidden;
+    display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;cursor:pointer;
+    background:none;border:none;font-family:'Caveat',cursive;color:#fff;padding:20px;width:min(520px,92vw);line-height:1.1;
+  }
+  .mail-env .me-emoji{font-size:6.5rem;line-height:1.15;filter:drop-shadow(0 14px 18px rgba(46,16,101,.55))}
+  .mail-env .me-txt{display:block;font-size:2rem;font-weight:700;line-height:1.1;text-shadow:0 2px 10px rgba(46,16,101,.8)}
+  .mail-env .me-sub{display:block;margin-top:-6px;line-height:1.1;font-size:1.2rem;color:#ede9fe;text-shadow:0 2px 8px rgba(46,16,101,.8)}
+  .mail-env.in{visibility:visible;animation:mailDepth 2.6s cubic-bezier(.2,.7,.25,1) forwards,mailFloat 2.4s ease-in-out 2.6s infinite}
+  .mail-env.out{visibility:visible;animation:mailOut .5s ease-in forwards}
+  @keyframes mailDepth{
+    0%{transform:translate(-50%,-50%) scale(.04) rotate(-24deg);opacity:0;filter:blur(8px)}
+    35%{opacity:.9;filter:blur(3px)}
+    70%{transform:translate(-50%,-50%) scale(1.12) rotate(7deg);opacity:1;filter:blur(0)}
+    85%{transform:translate(-50%,-50%) scale(.96) rotate(-3deg)}
+    100%{transform:translate(-50%,-50%) scale(1) rotate(0);opacity:1;filter:blur(0)}
+  }
+  @keyframes mailFloat{0%,100%{transform:translate(-50%,-50%) scale(1) rotate(-2deg)}50%{transform:translate(-50%,calc(-50% - 10px)) scale(1.04) rotate(2deg)}}
+  @keyframes mailOut{0%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(-50%,-50%) scale(1.6);opacity:0}}
+  .mail-paper{
+    position:fixed;z-index:41;left:50%;top:50%;width:min(440px,92vw);
+    max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;
+    transform:translate(-50%,-44%) scale(.8);opacity:0;pointer-events:none;visibility:hidden;
+    background-color:#fffaf0;background-image:radial-gradient(#e9d5ff 1px,transparent 1px);background-size:14px 14px;
+    border:2px solid #c4b5fd;border-radius:18px;padding:22px 22px 18px;text-align:center;
+    box-shadow:0 24px 50px rgba(46,16,101,.5),0 0 0 6px rgba(255,255,255,.55);
+    transition:transform .7s var(--ease),opacity .6s ease,visibility 0s linear .7s;
+  }
+  .mail-paper.show{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:auto;visibility:visible;transition:transform .7s var(--ease),opacity .6s ease,visibility 0s}
+  .mp-title{font-family:'Dancing Script',cursive;font-weight:700;font-size:1.8rem;color:#6d28d9;line-height:1.1}
+  .mp-date{font-size:1.05rem;color:#a78bfa;margin:2px 0 10px}
+  .mp-text{font-size:1.3rem;line-height:1.32;color:#4c1d95;text-align:center;white-space:pre-line}
+  .mp-btn{margin-top:14px;background:#7c3aed;color:#fff;border:none;border-radius:30px;padding:9px 24px;font-family:'Caveat',cursive;font-size:1.3rem;font-weight:600;cursor:pointer;box-shadow:0 5px 14px rgba(124,58,237,.35)}
+  @media (max-width:700px){.mail-paper{padding:18px 16px 14px}.mp-text{font-size:1.18rem;line-height:1.28}.mail-env .me-emoji{font-size:5.5rem}.mail-env .me-txt{font-size:1.8rem}}
+
+
+  /* ---------- aba da esquerda: mensagens guardadas ---------- */
+  .mail-tab{
+    position:fixed;z-index:19;left:0;top:50%;transform:translate(-115%,-50%);opacity:0;visibility:hidden;
+    display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;
+    background:rgba(255,255,255,.94);border:1px solid #ddd6fe;border-left:none;border-radius:0 18px 18px 0;
+    padding:12px 14px 10px 12px;color:#4c1d95;box-shadow:6px 8px 24px rgba(76,29,149,.28);
+    font-family:'Caveat',cursive;line-height:1;
+    transition:transform .9s var(--ease),opacity .6s ease,visibility 0s linear .9s;
+  }
+  .mail-tab.show{transform:translate(0,-50%);opacity:1;visibility:visible;transition:transform .9s var(--ease),opacity .6s ease,visibility 0s}
+  .mail-tab .lt-e{font-size:2rem}
+  .mail-tab small{font-size:1.05rem;color:#7c3aed;font-weight:600;text-align:center}
+  @media (hover:hover){.mail-tab:hover{background:#fff}}
+  .ma-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:4px 0 10px}
+  .ma-chip{background:#fff;border:1.5px solid #c4b5fd;border-radius:18px;padding:3px 12px;font-family:'Caveat',cursive;font-size:1.1rem;font-weight:600;color:#6d28d9;cursor:pointer}
+  .ma-chip.sel{background:#7c3aed;color:#fff;border-color:#7c3aed}
+  @media (max-width:700px){
+    .mail-tab{top:auto;bottom:16px;left:12px;transform:translate(0,160%);flex-direction:row;align-items:center;gap:8px;border:1px solid #ddd6fe;border-radius:30px;padding:8px 16px 8px 12px}
+    .mail-tab.show{transform:translate(0,0)}
+    .mail-tab .lt-e{font-size:1.6rem}
+  }
+
   /* ---------- celular ---------- */
   @media (max-width:700px){
     .scene{padding:12px 16px 26px 10px}
@@ -455,6 +516,28 @@
   </div>
 </div>
 
+<div class="veil" id="mveil"></div>
+<button class="mail-env" id="mailenv" onclick="abrirMail()" aria-label="Você recebeu uma mensagem">
+  <span class="me-emoji">💌</span>
+  <span class="me-txt">Você recebeu uma mensagem</span>
+  <span class="me-sub">toque para abrir 💜</span>
+</button>
+<div class="mail-paper" id="mailpaper" role="dialog" aria-label="Mensagem">
+  <div class="mp-title">Uma mensagem pra você 💜</div>
+  <div class="mp-date" id="mpdate"></div>
+  <div class="mp-text" id="mptext"></div>
+  <button class="mp-btn" onclick="fecharMail()">Guardar no coração 🤍</button>
+</div>
+<button class="mail-tab" id="mailtab" onclick="abrirArq()" aria-label="Mensagens guardadas">
+  <span class="lt-e">💜</span><small>minhas<br>mensagens</small>
+</button>
+<div class="mail-paper" id="mailarch" role="dialog" aria-label="Mensagens guardadas">
+  <div class="mp-title">Mensagens guardadas 💜</div>
+  <div class="mp-date" id="marchdate"></div>
+  <div class="ma-chips" id="marchchips"></div>
+  <div class="mp-text" id="marchtext"></div>
+  <button class="mp-btn" onclick="fecharArq()">Fechar com carinho 🤍</button>
+</div>
 <button class="love-tab" id="lovetab" onclick="abrirAmo()" aria-label="Uma surpresa">
   <span class="lt-e">💌</span><small>uma<br>surpresa</small>
 </button>
@@ -811,6 +894,96 @@
     document.getElementById('lovemodal').classList.remove('show');
   }
   buildLove();
+
+  /* ---------- mensagem semanal: toda segunda às 21:00 (hoje, exceção: terça 03/11) ---------- */
+  /* Para adicionar a próxima: copie um bloco, troque id, at (data/hora com -03:00), label e text.
+     Segundas às 21:00: 2026-11-09, 2026-11-16, 2026-11-23, 2026-11-30 ... */
+  const MAIL = [
+    {id:'2026-11-03', at:Date.parse('2026-11-03T21:00:00-03:00'), label:'terça, 03/11 · 21:00', text:"Vocee apareceu e tudo mudou, eu não te esperava na minha vida mas agora não consigo imaginar ela sem voceekkkk (como te falei sobre o celular aquele dia). Seu sorriso me prendeu de um jeito que eu nem sei explicar e tudo que eu quero é ter você pertinho de mim. Quero passar meu tempo contigo independente de onde estivermos ou de quanto tempo teremos juntos, pq se você estiver comigo qualquer lugar já vai ser especial. Quando te vi alguma coisa mudou em mim e hoje tenho certeza que você é a pessoa que eu sempre sonhei em encontrar.\n\nComo sempre te disse, só de estar com você minha mente já acalma. É incrível como uma simples conversa consegue mudar meu dia e como sua presença consegue me fazer tão bem. Eu admito que viciei no seu sorriso, no seu olhar, na sua fala e em cada pequena coisa que faz você ser quem ékkkkk tudo aquilo que um dia imaginei encontrar em alguemm parece estar tudoo em você e quanto mais te conheço mais percebo o quanto sou apaixonado por cadaa detalhe seuuu.\n\nEuu me apaixonei por todas as suas perfeições e imperfeições (que me aparentam ser poucaskkkkk que pessoa perfeita emm pldmss) e acho que cada pequena parte de mim é perdidamente apaixonada por cada parte de você. Nunca quero ser o motivo de um dia ruim seu, muito pelo contrário, quero estar ao seu lado, te fazer bem e mostrar todoss os dias o quantoo vocee é importantee pra mimm.\n\nVocê sabe que só de conversar com você já me dá vontade de dizer que eu te amo. E eu te amo MUITO, não é poucokkkkkk (achoo que já deuu pra perceberr). Você foi a primeira pessoa que me fez sentir tudo isso na vida e por isso quero sempre te lembrar do quanto é especial pra mim. EU, GABRIEL, TE AMO MEU BEMM. Te amo muito muito mesmo por cada vez que fico bobo vendo as coisas que você faz, por cada conversa, cada momento e cada detalhe que me faz gostar ainda mais de vocee, assim como eu sempre te dissekkkkkkkkk, sou apaixonado em VOCÊ, na sua presença e em tudo que você faz. Você é incrível e eu espero conseguir te fazer sentir pelo menos um pouquinho de tudo isso que você me faz sentir."}
+  ];
+  const mailMem = {};
+  function mailRead(id){
+    try{ return localStorage.getItem('livro_msg_'+id)==='1'; }catch(e){ return !!mailMem[id]; }
+  }
+  function mailMark(id){
+    mailMem[id] = true;
+    try{ localStorage.setItem('livro_msg_'+id,'1'); }catch(e){}
+  }
+  let mailCur = null;
+  function mailBusy(){
+    return !!document.querySelector('.answer.show, .love-modal.show, .letter.in, .mail-paper.show, .mail-env.in, .mail-env.out');
+  }
+  function checkMail(){
+    if(mailBusy()) return;
+    const now = Date.now();
+    const m = MAIL.filter(x=>x.at<=now && !mailRead(x.id)).sort((a,b)=>a.at-b.at)[0];
+    if(!m) return;
+    mailCur = m;
+    document.getElementById('mveil').classList.add('show');
+    const e = document.getElementById('mailenv');
+    e.classList.remove('out'); e.classList.remove('in'); void e.offsetWidth;
+    e.classList.add('in');
+  }
+  function abrirMail(){
+    ensureAudio();
+    if(!mailCur) return;
+    document.getElementById('mpdate').textContent = mailCur.label;
+    document.getElementById('mptext').textContent = mailCur.text;
+    const e = document.getElementById('mailenv');
+    e.classList.remove('in'); e.classList.add('out');
+    setTimeout(()=>{
+      e.classList.remove('out');
+      document.getElementById('mailpaper').classList.add('show');
+    }, 450);
+  }
+  function fecharMail(){
+    if(mailCur) mailMark(mailCur.id);
+    mailCur = null;
+    document.getElementById('mailpaper').classList.remove('show');
+    document.getElementById('mveil').classList.remove('show');
+    setTimeout(updateMailTab, 700);
+    setTimeout(checkMail, 1200);
+  }
+
+  /* aba da esquerda: releitura das mensagens já recebidas */
+  function mailSaved(){
+    const now = Date.now();
+    return MAIL.filter(x=>x.at<=now && mailRead(x.id)).sort((a,b)=>a.at-b.at);
+  }
+  function updateMailTab(){
+    document.getElementById('mailtab').classList.toggle('show', mailSaved().length>0);
+  }
+  function arqSel(id){
+    const list = mailSaved(), m = list.find(x=>x.id===id) || list[list.length-1];
+    if(!m) return;
+    document.getElementById('marchdate').textContent = m.label;
+    document.getElementById('marchtext').textContent = m.text;
+    const box = document.getElementById('marchchips');
+    box.innerHTML = '';
+    if(list.length>1){
+      list.forEach(x=>{
+        const c = document.createElement('button');
+        c.className = 'ma-chip'+(x.id===m.id?' sel':'');
+        c.textContent = x.label.split(' · ')[0];
+        c.onclick = ()=>arqSel(x.id);
+        box.appendChild(c);
+      });
+    }
+  }
+  function abrirArq(){
+    ensureAudio();
+    if(mailBusy()) return;
+    arqSel();
+    document.getElementById('mveil').classList.add('show');
+    document.getElementById('mailarch').classList.add('show');
+  }
+  function fecharArq(){
+    document.getElementById('mailarch').classList.remove('show');
+    document.getElementById('mveil').classList.remove('show');
+  }
+  setTimeout(updateMailTab, 800);
+  setTimeout(checkMail, 1800);
+  setInterval(()=>{ checkMail(); updateMailTab(); }, 20000);
 
   /* ao fechar o livro com carinho, aparece a música no topo */
   function fechar(){
