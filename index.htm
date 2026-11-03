@@ -316,13 +316,23 @@
   .a-res{margin-top:12px}
   .a-res .pop{animation:popIn .5s cubic-bezier(.2,.8,.3,1.2)}
   @keyframes popIn{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
-  .a-res img{display:block;margin:0 auto 6px;max-height:24vh;max-width:70%;width:auto;border-radius:14px;border:3px solid #ddd6fe;box-shadow:0 6px 16px rgba(76,29,149,.25)}
+  .a-res img{display:block;margin:0 auto 6px;max-height:22vh;max-width:70%;width:auto;border-radius:14px;border:3px solid #ddd6fe;box-shadow:0 6px 16px rgba(76,29,149,.25)}
   .a-res img.small{width:130px;max-width:50%}
   .a-res p{font-size:1.4rem;line-height:1.2;color:#4c1d95}
   .a-res .a-heart{font-size:2rem;line-height:1.1}
   .a-res .a-small{font-size:1.15rem;color:#7c3aed}
   .a-close{margin-top:14px}
-  @media (max-width:700px){.a-big{font-size:2rem;margin:4px 0 10px}.a-name{font-size:1.5rem}.answer{padding:20px 16px 16px}}
+  .a-timer{margin-top:14px;padding-top:12px;border-top:1.5px dashed #ddd6fe;display:none}
+  .a-timer.show{display:block;animation:popIn .5s cubic-bezier(.2,.8,.3,1.2)}
+  .t-lbl{font-size:1.25rem;color:#6d28d9;line-height:1.1}
+  .t-since{font-size:1rem;color:#a78bfa;margin-bottom:6px}
+  .t-row{display:flex;justify-content:center;gap:6px;flex-wrap:nowrap}
+  .t-box{background:#f5f3ff;border:1px solid #ddd6fe;border-radius:12px;padding:5px 10px;min-width:54px;flex:0 1 auto;white-space:nowrap}
+  .t-box b{display:block;font-family:'Cinzel',serif;font-weight:700;font-size:1.35rem;color:#5b21b6;line-height:1.15;font-variant-numeric:tabular-nums}
+  .t-box small{display:block;font-size:.95rem;color:#7c3aed;line-height:1}
+  .t-mode{margin-top:10px;background:#fff;border:1.5px solid #c4b5fd;border-radius:20px;padding:5px 16px;font-family:'Caveat',cursive;font-size:1.2rem;font-weight:600;color:#6d28d9;cursor:pointer}
+  @media (hover:hover){.t-mode:hover{background:#f5f3ff}}
+  @media (max-width:700px){.a-big{font-size:2rem;margin:4px 0 10px}.a-name{font-size:1.5rem}.answer{padding:18px 14px 14px}.a-res img{max-height:14vh}.a-res{margin-top:8px}.a-timer{margin-top:10px;padding-top:8px}.a-close{margin-top:10px}.t-row{gap:4px}.t-box{min-width:0;padding:4px 7px;flex:0 1 auto}.t-box b{font-size:1.2rem}.a-btns{gap:6px}.a-btn{padding:6px 14px}}
 
   /* ---------- celular ---------- */
   @media (max-width:700px){
@@ -403,6 +413,12 @@
     <button class="a-btn" onclick="responder(3,this)">Te odeio</button>
   </div>
   <div class="a-res" id="ares"></div>
+  <div class="a-timer" id="atimer">
+    <div class="t-lbl">Estamos conversando há</div>
+    <div class="t-since">desde 14/08/2026 às 21:12</div>
+    <div class="t-row" id="trow"></div>
+    <button class="t-mode" id="tmode" onclick="mudarFormato()">Mudar formato ⏱️</button>
+  </div>
   <button class="a-close" id="aclose" style="display:none" onclick="fecharResposta()">Fechar com carinho 🤍</button>
 </div>
 
@@ -412,7 +428,7 @@
     {r:'I', t:['2024. Foi o primeiro ano q te vi... provavelmente devo ter te falado oi ou nem isso mass quemm diria como estaa hojee emm diaa , eu tinhaa acabado de entrarr naa escolaa kkkkkk']},
     {r:'II', t:['Estava chovendo na escola e eu te emprestei minha blusa. Parecia uma coisa pequena, mas ficou guardada em mim como um dos dias mais marcantess e dsclpp fofinhoo de todosskkkkkkk ataee hjj quando esta chovendoo etcc assim lembroo desse momentoo e de vcckkkkkk Fofinhaa']},
     {r:'III', t:['Na hora da despedida quando iriamos entrar de feriasss se naoo me enganoo eu te abracei pela primeira vez. Meu coração disparou, e eu fingi que estava tudo normal mass fiqueii mtt felizz por dentrookkkkkkk .']},
-    {r:'IV', t:['15 de agosto de 2026. Fiquei um dia inteiro pra saber o que te mandar e se você me responderia ou não.','Mesmo apos cnvs com vc a noite toda euu fiqueii meio desacreditadoo enquantoo eu faziaa minhass coisas e lembroo de terr ficado diass pra te pedirr seu numeroo ate usarr uma figurinhaa como desculpaakkkkkkkk foii a melhor coisa q euu fizz']},
+    {r:'IV', t:['14 de agosto de 2026, 21:12. Foi a hora em que te mandei a primeira msg. Fiquei um dia inteiro pra saber o que te mandar e se você me responderia ou não.','Mesmo apos cnvs com vc a noite toda euu fiqueii meio desacreditadoo enquantoo eu faziaa minhass coisas e lembroo de terr ficado diass pra te pedirr seu numeroo ate usarr uma figurinhaa como desculpaakkkkkkkk foii a melhor coisa q euu fizz']},
     {r:'V', t:['O dia do laboratório. Um dia que tinha tudo pra ser comum e virou uma das melhores memória daquelas que quandoo olho praa vcc lembrooo principalmentee peloss motivosskkkkkkk comoo seu vicio emm mentalista que euu vou assistir comm vcc algumm diaa']},
     {r:'VI', t:['o diaa do Lk.... Prefiro não comentar muito, mas você sabe que eu faria tudo novamente peloss mesmos motivoss e sem arrependimento algumm de terr persistido maiss ( naoo ia desistir taoo facil lde vcc )']},
     {r:'VII', t:['E aa situaçao de hjjj vocee sabe que desde entaoo tudoo q aconteceuu eu naoo consegui ficar umm dia sem pensar emm vcc de te mandar msgg ouu de querer ficar cvnss comm vc o diaa ou a madrugada inteiraa mesmoo que com o sonoo me quebrandoo no meiooKKKKKKK quantas vzss tomei remedioo pra dor de cabeça e msmm assimm quis ficar na frente do celularr por vcckkkkkkk isso éé loucuraa e vcc se recusa a tomarr um remedio e parar de cnvss cmgg ( essa segunda parte eu nunca vou apoiar )']},
@@ -623,8 +639,60 @@
     document.getElementById('ares').innerHTML =
       '<div class="pop"><img class="'+r.cls+'" src="'+r.img+'" alt="">'+r.html+'</div>';
     document.getElementById('aclose').style.display = '';
+    showTimer();
+  }
+  /* ---------- contador desde 14/08/2026 21:12 (horário de Brasília) ---------- */
+  const START = Date.parse('2026-08-14T21:12:00-03:00');
+  const TMODES = [
+    ['meses','dias','horas','minutos','segundos'],
+    ['dias','horas','minutos','segundos'],
+    ['horas','minutos','segundos'],
+    ['minutos','segundos'],
+    ['segundos']
+  ];
+  const TNAMES = {meses:['mês','meses'],dias:['dia','dias'],horas:['hora','horas'],minutos:['minuto','minutos'],segundos:['segundo','segundos']};
+  let tmode = 0, tint = null;
+
+  function timeParts(mode, now){
+    const diff = Math.max(0, now - START);
+    const t = Math.floor(diff/1000);
+    if(mode===0){
+      const OFF = 3*3600*1000; /* trabalha em horário de Brasília */
+      const a = new Date(START-OFF), b = new Date(Math.max(now,START)-OFF);
+      let months = (b.getUTCFullYear()-a.getUTCFullYear())*12 + (b.getUTCMonth()-a.getUTCMonth());
+      const anchor = m => Date.UTC(a.getUTCFullYear(), a.getUTCMonth()+m, a.getUTCDate(), a.getUTCHours(), a.getUTCMinutes(), a.getUTCSeconds());
+      if(anchor(months) > b.getTime()) months--;
+      const rest = Math.floor((b.getTime()-anchor(months))/1000);
+      return {meses:months, dias:Math.floor(rest/86400), horas:Math.floor(rest%86400/3600), minutos:Math.floor(rest%3600/60), segundos:rest%60};
+    }
+    if(mode===1) return {dias:Math.floor(t/86400), horas:Math.floor(t%86400/3600), minutos:Math.floor(t%3600/60), segundos:t%60};
+    if(mode===2) return {horas:Math.floor(t/3600), minutos:Math.floor(t%3600/60), segundos:t%60};
+    if(mode===3) return {minutos:Math.floor(t/60), segundos:t%60};
+    return {segundos:t};
+  }
+  function tickTimer(){
+    const units = TMODES[tmode], v = timeParts(tmode, Date.now());
+    document.getElementById('trow').innerHTML = units.map((u,i)=>{
+      const n = v[u];
+      const txt = i===0 ? n.toLocaleString('pt-BR') : String(n).padStart(2,'0');
+      return '<div class="t-box"><b>'+txt+'</b><small>'+TNAMES[u][n===1?0:1]+'</small></div>';
+    }).join('');
+  }
+  function showTimer(){
+    document.getElementById('atimer').classList.add('show');
+    tickTimer();
+    if(!tint) tint = setInterval(tickTimer, 1000);
+  }
+  function stopTimer(){
+    clearInterval(tint); tint = null;
+    document.getElementById('atimer').classList.remove('show');
+  }
+  function mudarFormato(){
+    tmode = (tmode+1) % TMODES.length;
+    tickTimer();
   }
   function fecharResposta(){
+    stopTimer();
     document.getElementById('answer').classList.remove('show');
     document.getElementById('veil').classList.remove('show');
     fechar();
