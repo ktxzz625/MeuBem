@@ -909,6 +909,8 @@
     mailMem[id] = true;
     try{ localStorage.setItem('livro_msg_'+id,'1'); }catch(e){}
   }
+  /* a carta só aparece no próprio dia da mensagem; depois disso ela fica só na aba da esquerda */
+  function mailExpired(x){ return Date.now() > Date.parse(x.id+'T23:59:59.999-03:00'); }
   let mailCur = null;
   function mailBusy(){
     return !!document.querySelector('.answer.show, .love-modal.show, .letter.in, .mail-paper.show, .mail-env.in, .mail-env.out');
@@ -916,7 +918,7 @@
   function checkMail(){
     if(mailBusy()) return;
     const now = Date.now();
-    const m = MAIL.filter(x=>x.at<=now && !mailRead(x.id)).sort((a,b)=>a.at-b.at)[0];
+    const m = MAIL.filter(x=>x.at<=now && !mailRead(x.id) && !mailExpired(x)).sort((a,b)=>a.at-b.at)[0];
     if(!m) return;
     mailCur = m;
     document.getElementById('mveil').classList.add('show');
@@ -948,7 +950,7 @@
   /* aba da esquerda: releitura das mensagens já recebidas */
   function mailSaved(){
     const now = Date.now();
-    return MAIL.filter(x=>x.at<=now && mailRead(x.id)).sort((a,b)=>a.at-b.at);
+    return MAIL.filter(x=>x.at<=now && (mailRead(x.id) || mailExpired(x))).sort((a,b)=>a.at-b.at);
   }
   function updateMailTab(){
     document.getElementById('mailtab').classList.toggle('show', mailSaved().length>0);
