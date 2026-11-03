@@ -334,6 +334,64 @@
   @media (hover:hover){.t-mode:hover{background:#f5f3ff}}
   @media (max-width:700px){.a-big{font-size:2rem;margin:4px 0 10px}.a-name{font-size:1.5rem}.answer{padding:18px 14px 14px}.a-res img{max-height:14vh}.a-res{margin-top:8px}.a-timer{margin-top:10px;padding-top:8px}.a-close{margin-top:10px}.t-row{gap:4px}.t-box{min-width:0;padding:4px 7px;flex:0 1 auto}.t-box b{font-size:1.2rem}.a-btns{gap:6px}.a-btn{padding:6px 14px}}
 
+
+  /* ---------- cartinha do lado: coisas que eu amo ---------- */
+  .love-tab{
+    position:fixed;z-index:19;right:0;top:50%;transform:translate(115%,-50%);opacity:0;visibility:hidden;
+    display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;
+    background:rgba(255,255,255,.94);border:1px solid #ddd6fe;border-right:none;border-radius:18px 0 0 18px;
+    padding:12px 12px 10px 14px;color:#4c1d95;box-shadow:-6px 8px 24px rgba(76,29,149,.28);
+    font-family:'Caveat',cursive;line-height:1;
+    transition:transform .9s var(--ease),opacity .6s ease,visibility 0s linear .9s;
+  }
+  .love-tab.show{transform:translate(0,-50%);opacity:1;visibility:visible;transition:transform .9s var(--ease),opacity .6s ease,visibility 0s}
+  .love-tab .lt-e{font-size:2rem;animation:bob 1.6s ease-in-out infinite}
+  .love-tab small{font-size:1.05rem;color:#7c3aed;font-weight:600;text-align:center}
+  @media (hover:hover){.love-tab:hover{background:#fff}}
+
+  .love-modal{
+    position:fixed;z-index:34;left:50%;top:50%;width:min(470px,94vw);
+    max-height:calc(100vh - 20px);max-height:calc(100dvh - 20px);overflow-y:auto;
+    transform:translate(-50%,-50%) scale(.85);opacity:0;pointer-events:none;visibility:hidden;
+    background-color:#fffdf7;border:2px solid #c4b5fd;border-radius:20px;padding:20px 18px 18px;text-align:center;
+    box-shadow:0 24px 50px rgba(46,16,101,.45),0 0 0 6px rgba(255,255,255,.55);
+    transition:transform .6s var(--ease),opacity .5s ease,visibility 0s linear .6s;
+  }
+  .love-modal.show{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:auto;visibility:visible;transition:transform .6s var(--ease),opacity .5s ease,visibility 0s}
+  .lv-title{font-family:'Dancing Script',cursive;font-weight:700;font-size:1.9rem;color:#6d28d9;line-height:1.1}
+  .lv-sub{font-size:1.15rem;color:#7c3aed;margin:2px 0 8px}
+  .lv-row{display:flex;justify-content:center;gap:6px;margin:6px 0}
+  .lv-tile{
+    width:46px;height:54px;border-radius:12px;border:1.5px solid #c4b5fd;background:#f5f3ff;
+    font-family:'Cinzel',serif;font-weight:700;font-size:1.15rem;color:#a78bfa;cursor:pointer;
+    transition:transform .2s,background .3s,color .3s;
+  }
+  @media (hover:hover){.lv-tile:hover{transform:translateY(-3px)}}
+  .lv-tile.open{background:#7c3aed;color:#fff;border-color:#7c3aed;font-size:1.5rem}
+  .lv-tile.cur{box-shadow:0 0 0 3px #ddd6fe;transform:translateY(-3px)}
+  .love-modal.done .lv-tile{animation:pulse 1.8s ease-in-out infinite}
+  .lv-msg{
+    margin-top:12px;min-height:150px;background-color:#fffaf0;background-image:radial-gradient(#e9d5ff 1px,transparent 1px);background-size:14px 14px;
+    border:1.5px dashed #c4b5fd;border-radius:14px;padding:12px 14px;color:#4c1d95;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  }
+  .lv-msg .lv-l{font-family:'Cinzel',serif;font-weight:700;font-size:1.7rem;color:#7c3aed;line-height:1}
+  .lv-msg .lv-t{font-size:1.35rem;line-height:1.25}
+  .lv-msg .lv-t.long{font-size:1.15rem;line-height:1.22}
+  .lv-msg.pop > *{animation:popIn .45s cubic-bezier(.2,.8,.3,1.2)}
+  .lv-count{font-size:1.05rem;color:#a78bfa;margin-top:6px}
+  .lv-done{display:none;font-family:'Dancing Script',cursive;font-weight:700;font-size:1.6rem;color:#7c3aed;margin-top:4px}
+  .love-modal.done .lv-done{display:block;animation:popIn .5s cubic-bezier(.2,.8,.3,1.2)}
+  .lv-close{margin-top:10px;background:#7c3aed;color:#fff;border:none;border-radius:30px;padding:8px 22px;font-family:'Caveat',cursive;font-size:1.3rem;font-weight:600;cursor:pointer;box-shadow:0 5px 14px rgba(124,58,237,.35)}
+  @media (max-width:700px){
+    .love-tab{top:auto;bottom:16px;right:12px;transform:translate(0,160%);flex-direction:row;align-items:center;gap:8px;border:1px solid #ddd6fe;border-radius:30px;padding:8px 16px 8px 12px}
+    .love-tab.show{transform:translate(0,0)}
+    .love-tab .lt-e{font-size:1.6rem}
+    .lv-tile{width:38px;height:48px;font-size:1rem}
+    .lv-row{gap:5px}
+    .lv-msg{min-height:130px}
+  }
+
   /* ---------- celular ---------- */
   @media (max-width:700px){
     .scene{padding:12px 16px 26px 10px}
@@ -397,6 +455,20 @@
   </div>
 </div>
 
+<button class="love-tab" id="lovetab" onclick="abrirAmo()" aria-label="Uma surpresa">
+  <span class="lt-e">💌</span><small>uma<br>surpresa</small>
+</button>
+<div class="veil" id="veil2" onclick="fecharAmo()"></div>
+<div class="love-modal" id="lovemodal" role="dialog" aria-label="Coisas que eu amo em você">
+  <div class="lv-title">Coisas que eu amo em você</div>
+  <div class="lv-sub">clica em cada quadradinho 💜</div>
+  <div class="lv-row" id="lvr1"></div>
+  <div class="lv-row" id="lvr2"></div>
+  <div class="lv-msg" id="lvmsg"><div class="lv-t">Cada quadradinho guarda um motivo, e juntos eles formam o seu nome 💜</div></div>
+  <div class="lv-count" id="lvcount">0 de 12 abertos</div>
+  <div class="lv-done">MARIA VITÓRIA 💜</div>
+  <button class="lv-close" onclick="fecharAmo()">Fechar com carinho 🤍</button>
+</div>
 <div class="veil" id="veil"></div>
 <div class="letter" id="letter" role="dialog" aria-label="Cartinha">
   <div class="l-env">💌</div>
@@ -698,10 +770,53 @@
     fechar();
   }
 
+  /* ---------- coisas que eu amo em você (MARIA VITÓRIA) ---------- */
+  const LOVE = ["Eu amo seus olhos saoo as coisas maiss lindinhas do mundoo eu ficaria olhandoo o diaa inteirinho", "Amo quandoo vcc fica com vergonhaa por euu te falar qualquerr coisa comoo o quanto te amo", "Euu amo quandoo vcc me mostra o porque voce foi a melhor escolha de mudar oque eu pensava sobre eu ficar com alguem ou nao", "Que mesmo com vergonha voce me diz o maximo que consegue", "Sua forma de demonstrar carinho e que gosta de mimm", "Os momentos que passo comm vcc sejaa cnvss no whats sejaa pessoalmentee quando estava abraçadoo de maoo dada ouu so cnvss msmm", "Euu amo suaa maneiraa e que tipoo éé LINDO de se verr como vcc éé comm sua familiaa pelo que euu vejo, o quanto vc respeita ajuda seus irmaos e tudoo maiss parabenss issoo é lindo muito lindo msmm", "Euuu amoo o tantoo quee vocee see preocupouu cmggg quandoo euu fiqueii mall e tudoo maiss sobree o freudd e qualquerr coisa assimm mbbb", "Amoo suaa “ditadura” e q de vddd euu nuncaa reclamoo KKKKKKKKKKKK achoo mtt fofinhaa e quandoo euu disse “sobre manda quem pode e obedece quemm tem juizo” euu nn mentii ouu atee do “minha palavra sera sempre a ultima: Sim senhora.” KKKKKKKKKKKK", "AMOO verr fotoo suaa, audiooo seuu e esperoo mtt q a call sejaa em brevee pqq queroo ficarr comm vccc", "Amoo seuu gostoo pra jogookkkkkkkkk brincoo mtt sobree fifa etcc mass semm brincadeiraa vcc so joga coisaa mtt boaakkkkkkk e amareii assistirr vc jogarr assistir seriee juntinhoo comm vcc e tudoo maiss", "E por fimm seii quee ja faleii muitoo isso AMO VOCE porr quemm vcc éé"];
+  const LETTERS = 'MARIAVITORIA'.split('');
+  const loveOpen = new Set();
+  let loveCur = -1;
+  function buildLove(){
+    const r1 = document.getElementById('lvr1'), r2 = document.getElementById('lvr2');
+    LETTERS.forEach((L,i)=>{
+      const b = document.createElement('button');
+      b.className = 'lv-tile'; b.id = 'lvt'+i; b.textContent = i+1;
+      b.setAttribute('aria-label','Motivo '+(i+1));
+      b.onclick = ()=>verAmo(i);
+      (i<5 ? r1 : r2).appendChild(b);
+    });
+  }
+  function verAmo(i){
+    loveOpen.add(i); loveCur = i;
+    LETTERS.forEach((L,k)=>{
+      const t = document.getElementById('lvt'+k);
+      t.textContent = loveOpen.has(k) ? L : (k+1);
+      t.classList.toggle('open', loveOpen.has(k));
+      t.classList.toggle('cur', k===i);
+    });
+    const m = document.getElementById('lvmsg');
+    m.innerHTML = '';
+    const l = document.createElement('div'); l.className = 'lv-l'; l.textContent = LETTERS[i]+' · '+(i+1);
+    const t = document.createElement('div'); t.className = 'lv-t'+(LOVE[i].length>150?' long':''); t.textContent = LOVE[i];
+    m.appendChild(l); m.appendChild(t);
+    m.classList.remove('pop'); void m.offsetWidth; m.classList.add('pop');
+    document.getElementById('lvcount').textContent = loveOpen.size+' de 12 abertos';
+    document.getElementById('lovemodal').classList.toggle('done', loveOpen.size===12);
+  }
+  function abrirAmo(){
+    document.getElementById('veil2').classList.add('show');
+    document.getElementById('lovemodal').classList.add('show');
+  }
+  function fecharAmo(){
+    document.getElementById('veil2').classList.remove('show');
+    document.getElementById('lovemodal').classList.remove('show');
+  }
+  buildLove();
+
   /* ao fechar o livro com carinho, aparece a música no topo */
   function fechar(){
     goTo(0);
     setTimeout(()=>document.getElementById('music').classList.add('show'),1300);
+    setTimeout(()=>document.getElementById('lovetab').classList.add('show'),2400);
   }
 
   mq.addEventListener('change', build);
